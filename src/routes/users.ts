@@ -2,14 +2,14 @@ import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
-import { validateCreateUser } from '../middleware/validation';
-import { CreateUserRequest, LoginRequest, ApiResponse } from '../types';
+import { validateCreateUser, validateUpdateUserAddress, authenticateToken } from '../middleware/validation';
+import { CreateUserRequest, LoginRequest, UpdateUserAddressRequest, ApiResponse } from '../types';
 
 const router = Router();
 
 router.post('/register', validateCreateUser, async (req: Request<object, ApiResponse, CreateUserRequest>, res: Response<ApiResponse>) => {
   try {
-    const { email, name, password } = req.body;
+    const { email, name, password, address, postalCode } = req.body;
 
     const existingUser = await User.query('email').eq(email).exec();
     if (existingUser.length > 0) {
@@ -26,6 +26,8 @@ router.post('/register', validateCreateUser, async (req: Request<object, ApiResp
       email,
       name,
       password: hashedPassword,
+      address,
+      postalCode,
     });
 
     await user.save();
@@ -37,6 +39,8 @@ router.post('/register', validateCreateUser, async (req: Request<object, ApiResp
         id: user.id,
         email: user.email,
         name: user.name,
+        address: user.address,
+        postalCode: user.postalCode,
       },
     });
   } catch (error) {
@@ -100,6 +104,8 @@ router.post('/login', async (req: Request<object, ApiResponse, LoginRequest>, re
           id: user.id,
           email: user.email,
           name: user.name,
+          address: user.address,
+          postalCode: user.postalCode,
         },
       },
     });
@@ -108,6 +114,44 @@ router.post('/login', async (req: Request<object, ApiResponse, LoginRequest>, re
     res.status(500).json({
       success: false,
       error: 'ログイン中にエラーが発生しました',
+    });
+  }
+});
+
+router.put('/address', authenticateToken, validateUpdateUserAddress, async (req: Request<object, ApiResponse, UpdateUserAddressRequest>, res: Response<ApiResponse>) => {
+  try {
+    const { address, postalCode } = req.body;
+    const userId = (req as any).userId;
+
+    const user = await User.get(userId);
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        error: 'ユーザーが見つかりません',
+      });
+      return;
+    }
+
+    await User.update({ id: userId }, { address, postalCode });
+
+    const updatedUser = await User.get(userId);
+
+    res.json({
+      success: true,
+      message: '住所と郵便番号を更新しました',
+      data: {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        name: updatedUser.name,
+        address: updatedUser.address,
+        postalCode: updatedUser.postalCode,
+      },
+    });
+  } catch (error) {
+    console.error('User address update error:', error);
+    res.status(500).json({
+      success: false,
+      error: '住所更新中にエラーが発生しました',
     });
   }
 });

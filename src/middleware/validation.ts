@@ -11,6 +11,15 @@ export const validatePassword = (password: string): boolean => {
   return password.length >= 6;
 };
 
+export const validatePostalCode = (postalCode: string): boolean => {
+  const postalCodeRegex = /^\d{7}$/;
+  return postalCodeRegex.test(postalCode);
+};
+
+export const validateAddress = (address: string): boolean => {
+  return address.trim().length > 0 && address.length <= 255;
+};
+
 export interface AuthenticatedRequest extends Request {
   userId?: string;
 }
@@ -60,12 +69,12 @@ export const validateCreateUser = (
   res: Response<ApiResponse>,
   next: NextFunction
 ): void => {
-  const { email, name, password } = req.body;
+  const { email, name, password, address, postalCode } = req.body;
 
-  if (!email || !name || !password) {
+  if (!email || !name || !password || !address || !postalCode) {
     res.status(400).json({
       success: false,
-      error: 'メール、名前、パスワードは必須です',
+      error: 'メール、名前、パスワード、住所、郵便番号は必須です',
     });
     return;
   }
@@ -82,6 +91,22 @@ export const validateCreateUser = (
     res.status(400).json({
       success: false,
       error: 'パスワードは6文字以上である必要があります',
+    });
+    return;
+  }
+
+  if (!validateAddress(address)) {
+    res.status(400).json({
+      success: false,
+      error: '住所は必須で、255文字以内で入力してください',
+    });
+    return;
+  }
+
+  if (!validatePostalCode(postalCode)) {
+    res.status(400).json({
+      success: false,
+      error: '郵便番号は7桁の数字で入力してください',
     });
     return;
   }
@@ -116,6 +141,40 @@ export const validateCreateProduct = (
     res.status(400).json({
       success: false,
       error: '在庫は0以上の数値である必要があります',
+    });
+    return;
+  }
+
+  next();
+};
+
+export const validateUpdateUserAddress = (
+  req: Request,
+  res: Response<ApiResponse>,
+  next: NextFunction
+): void => {
+  const { address, postalCode } = req.body;
+
+  if (!address || !postalCode) {
+    res.status(400).json({
+      success: false,
+      error: '住所と郵便番号は必須です',
+    });
+    return;
+  }
+
+  if (!validateAddress(address)) {
+    res.status(400).json({
+      success: false,
+      error: '住所は必須で、255文字以内で入力してください',
+    });
+    return;
+  }
+
+  if (!validatePostalCode(postalCode)) {
+    res.status(400).json({
+      success: false,
+      error: '郵便番号は7桁の数字で入力してください',
     });
     return;
   }

@@ -5,6 +5,8 @@ export interface IUser {
   email: string;
   name: string;
   password: string;
+  address: string;
+  postalCode: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,6 +36,15 @@ const userSchema = new dynamoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    address: {
+      type: String,
+      required: true,
+    },
+    postalCode: {
+      type: String,
+      required: true,
+      validate: (v: string) => /^\d{7}$/.test(v),
     },
   },
   {
