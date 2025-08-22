@@ -9,6 +9,8 @@ export interface CreateUserRequest {
   email: string;
   name: string;
   password: string;
+  address: string;
+  postalCode: string;
 }
 
 export interface LoginRequest {
@@ -34,6 +36,11 @@ export interface AuthenticatedRequest {
 }
 
 export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered';
+
+export interface UpdateUserAddressRequest {
+  address: string;
+  postalCode: string;
+}
 
 export interface ApiResponse<T = object> {
   success: boolean;

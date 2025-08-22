@@ -56,6 +56,8 @@ Table for managing basic user information
 | email | String | Required, GSI | メールアドレス（ログイン用）<br>Email address (for login) |
 | name | String | Required | ユーザー名<br>User name |
 | password | String | Required | ハッシュ化されたパスワード<br>Hashed password |
+| address | String | Required | 住所（255文字以内）<br>Address (within 255 characters) |
+| postalCode | String | Required | 郵便番号（7桁数字）<br>Postal code (7-digit number) |
 | createdAt | Date | Auto-generated | 作成日時<br>Creation timestamp |
 | updatedAt | Date | Auto-generated | 更新日時<br>Update timestamp |
 
@@ -72,6 +74,8 @@ Table for managing basic user information
   "email": "user@example.com",
   "name": "田中太郎",
   "password": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj/9lYgWp2.W",
+  "address": "東京都渋谷区神南1-1-1",
+  "postalCode": "1500041",
   "createdAt": "2024-01-15T09:30:00.000Z",
   "updatedAt": "2024-01-15T09:30:00.000Z"
 }
@@ -243,7 +247,9 @@ POST /api/users/register
 {
   "name": "田中太郎",
   "email": "tanaka@example.com",
-  "password": "securepassword123"
+  "password": "securepassword123",
+  "address": "東京都渋谷区神南1-1-1",
+  "postalCode": "1500041"
 }
 ```
 
@@ -274,3 +280,4 @@ Authorization: Bearer <jwt_token>
 
 - 2024-01-15: 初版作成 / Initial version created
 - テーブル構造とAPI設計の完成 / Completed table structure and API design
+- 2025-08-22: Userテーブルに住所・郵便番号フィールドを追加 / Added address and postal code fields to User table

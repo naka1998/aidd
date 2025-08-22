@@ -34,7 +34,9 @@ REST API specification for the e-commerce web application.
 {
   "name": "string",        // 必須：ユーザー名 / Required: User name
   "email": "string",       // 必須：メールアドレス / Required: Email address
-  "password": "string"     // 必須：パスワード（6文字以上）/ Required: Password (6+ chars)
+  "password": "string",    // 必須：パスワード（6文字以上）/ Required: Password (6+ chars)
+  "address": "string",     // 必須：住所（255文字以内）/ Required: Address (within 255 chars)
+  "postalCode": "string"   // 必須：郵便番号（7桁数字）/ Required: Postal code (7-digit number)
 }
 ```
 
@@ -49,7 +51,9 @@ REST API specification for the e-commerce web application.
   "data": {
     "id": "123e4567-e89b-12d3-a456-426614174000",
     "email": "user@example.com",
-    "name": "田中太郎"
+    "name": "田中太郎",
+    "address": "東京都渋谷区神南1-1-1",
+    "postalCode": "1500041"
   }
 }
 ```
@@ -60,6 +64,15 @@ REST API specification for the e-commerce web application.
 {
   "success": false,
   "error": "このメールアドレスは既に使用されています"
+}
+```
+
+**バリデーションエラー時 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "error": "メール、名前、パスワード、住所、郵便番号は必須です"
 }
 ```
 
@@ -90,7 +103,9 @@ REST API specification for the e-commerce web application.
     "user": {
       "id": "123e4567-e89b-12d3-a456-426614174000",
       "email": "user@example.com",
-      "name": "田中太郎"
+      "name": "田中太郎",
+      "address": "東京都渋谷区神南1-1-1",
+      "postalCode": "1500041"
     }
   }
 }
@@ -102,6 +117,56 @@ REST API specification for the e-commerce web application.
 {
   "success": false,
   "error": "メールアドレスまたはパスワードが正しくありません"
+}
+```
+
+### 1.3 ユーザー住所更新 / Update User Address
+
+**エンドポイント / Endpoint**: `PUT /api/users/address`  
+**認証 / Auth**: 必要 / Required
+
+#### リクエスト / Request
+
+```json
+{
+  "address": "string",     // 必須：住所（255文字以内）/ Required: Address (within 255 chars)
+  "postalCode": "string"   // 必須：郵便番号（7桁数字）/ Required: Postal code (7-digit number)
+}
+```
+
+#### レスポンス / Response
+
+**成功時 (200 OK)**
+
+```json
+{
+  "success": true,
+  "message": "住所と郵便番号を更新しました",
+  "data": {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "email": "user@example.com",
+    "name": "田中太郎",
+    "address": "東京都新宿区新宿1-1-1",
+    "postalCode": "1600022"
+  }
+}
+```
+
+**エラー時 (400 Bad Request)**
+
+```json
+{
+  "success": false,
+  "error": "住所と郵便番号は必須です"
+}
+```
+
+**エラー時 (404 Not Found)**
+
+```json
+{
+  "success": false,
+  "error": "ユーザーが見つかりません"
 }
 ```
 
@@ -391,7 +456,7 @@ REST API specification for the e-commerce web application.
 ```json
 {
   "success": false,
-  "error": "メール、名前、パスワードは必須です"
+  "error": "メール、名前、パスワード、住所、郵便番号は必須です"
 }
 ```
 
@@ -442,7 +507,9 @@ curl -X POST http://localhost:3000/api/users/register \
   -d '{
     "name": "田中太郎",
     "email": "tanaka@example.com",
-    "password": "securepassword123"
+    "password": "securepassword123",
+    "address": "東京都渋谷区神南1-1-1",
+    "postalCode": "1500041"
   }'
 
 # 2. ログイン / Login
@@ -496,3 +563,4 @@ curl -X POST http://localhost:3000/api/orders \
 
 - 2024-01-15: 初版作成 / Initial version created
 - APIエンドポイントと仕様の完成 / Completed API endpoints and specifications
+- 2025-08-22: ユーザー登録APIに住所・郵便番号フィールドを追加、住所更新APIを新規追加 / Added address and postal code fields to user registration API, added new address update API
