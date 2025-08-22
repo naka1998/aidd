@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECサイト - 商品一覧</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <div class="logo">ECサイト</div>
+      <ul class="nav-links">
+        <li><a href="/">ホーム</a></li>
+        <li><a href="/products">商品一覧</a></li>
+        <li><a href="/cart">カート</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <a href="#" class="btn btn-secondary" id="loginBtn">ログイン</a>
+        <a href="#" class="btn btn-primary" id="registerBtn">登録</a>
+        <span id="userInfo" class="hidden">
+          <span id="userName"></span>
+          <button class="btn btn-secondary" id="logoutBtn">ログアウト</button>
+        </span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>商品一覧</h1>
+    
+    <div class="filters">
+      <div class="form-group">
+        <label for="categoryFilter">カテゴリー</label>
+        <select id="categoryFilter" class="form-control">
+          <option value="">すべてのカテゴリー</option>
+          <option value="electronics">電子機器</option>
+          <option value="clothing">衣類</option>
+          <option value="books">書籍</option>
+          <option value="home">ホーム・ガーデン</option>
+          <option value="sports">スポーツ・アウトドア</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="productsContainer">
+      <div id="productsList" class="products-grid">
+        <div class="loading">商品を読み込み中...</div>
+      </div>
+    </div>
+
+    <!-- 商品詳細モーダル -->
+    <div id="productModal" class="modal hidden">
+      <div class="modal-content">
+        <div id="productDetails">
+          <!-- 商品詳細がここに表示されます -->
+        </div>
+        <button type="button" class="btn btn-secondary" id="closeProductModal">閉じる</button>
+      </div>
+    </div>
+
+    <!-- 商品追加モーダル（管理者用） -->
+    <div id="addProductModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>商品追加</h3>
+        <form id="addProductForm">
+          <div class="form-group">
+            <label for="productName">商品名</label>
+            <input type="text" id="productName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="productDescription">説明</label>
+            <textarea id="productDescription" class="form-control" rows="3" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="productPrice">価格</label>
+            <input type="number" id="productPrice" class="form-control" min="0" step="0.01" required>
+          </div>
+          <div class="form-group">
+            <label for="productStock">在庫</label>
+            <input type="number" id="productStock" class="form-control" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="productCategory">カテゴリー</label>
+            <select id="productCategory" class="form-control" required>
+              <option value="">選択してください</option>
+              <option value="electronics">電子機器</option>
+              <option value="clothing">衣類</option>
+              <option value="books">書籍</option>
+              <option value="home">ホーム・ガーデン</option>
+              <option value="sports">スポーツ・アウトドア</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="productImageUrl">画像URL（オプション）</label>
+            <input type="url" id="productImageUrl" class="form-control">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">追加</button>
+            <button type="button" class="btn btn-secondary" id="closeAddProductModal">キャンセル</button>
+          </div>
+        </form>
+        <div id="addProductAlert"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 ECサイト. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/products.js"></script>
+</body>
+</html>

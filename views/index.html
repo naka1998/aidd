@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECサイト - ホーム</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <div class="logo">ECサイト</div>
+      <ul class="nav-links">
+        <li><a href="/">ホーム</a></li>
+        <li><a href="/products">商品一覧</a></li>
+        <li><a href="/cart">カート</a></li>
+      </ul>
+      <div class="auth-buttons">
+        <a href="#" class="btn btn-secondary" id="loginBtn">ログイン</a>
+        <a href="#" class="btn btn-primary" id="registerBtn">登録</a>
+        <span id="userInfo" class="hidden">
+          <span id="userName"></span>
+          <button class="btn btn-secondary" id="logoutBtn">ログアウト</button>
+        </span>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <h1>ようこそ、ECサイトへ</h1>
+        <p>高品質な商品をお手頃価格でお届けします</p>
+        <a href="/products" class="btn btn-primary">商品を見る</a>
+      </div>
+    </section>
+
+    <section class="container">
+      <h2>おすすめ商品</h2>
+      <div id="featuredProducts" class="products-grid">
+        <div class="loading">商品を読み込み中...</div>
+      </div>
+    </section>
+
+    <!-- ログインモーダル -->
+    <div id="loginModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>ログイン</h3>
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginEmail">メールアドレス</label>
+            <input type="email" id="loginEmail" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">パスワード</label>
+            <input type="password" id="loginPassword" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">ログイン</button>
+            <button type="button" class="btn btn-secondary" id="closeLoginModal">キャンセル</button>
+          </div>
+        </form>
+        <div id="loginAlert"></div>
+      </div>
+    </div>
+
+    <!-- 登録モーダル -->
+    <div id="registerModal" class="modal hidden">
+      <div class="modal-content">
+        <h3>ユーザー登録</h3>
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="registerName">名前</label>
+            <input type="text" id="registerName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="registerEmail">メールアドレス</label>
+            <input type="email" id="registerEmail" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="registerPassword">パスワード</label>
+            <input type="password" id="registerPassword" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary">登録</button>
+            <button type="button" class="btn btn-secondary" id="closeRegisterModal">キャンセル</button>
+          </div>
+        </form>
+        <div id="registerAlert"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2024 ECサイト. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/js/auth.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
